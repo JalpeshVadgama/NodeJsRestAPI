@@ -22,28 +22,27 @@ router.get("/",function (req,res){
     res.json(employees);
 });
 
-/// Add employees
-router.post("/", function (req,res) {
-    var employee = req.body;
-    console.log(JSON.stringify(employee));
-    var isValid =isValidEmployee(employee);
-    if(isValid){
-        employees.push(employee);
-        res.send("api/employee/" + employee.Id);
-    } else{
-        res.sendStatus(500);
-    }
-});
-
 //get specific employee based on Id
 router.get("/:Id",function(req,res){
     var employeeId = parseInt(req.params.Id);
     var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
-    console.log(JSON.stringify(currentEmployee));
     if(currentEmployee){
         res.json(currentEmployee);
     }else{
         res.sendStatus(404);
+    }
+});
+
+/// Add employees
+router.post("/", function (req,res) {
+    var employee = req.body;
+    var isValid =isValidEmployee(employee);
+    console.log(isValid);
+    if(isValid){
+        employees.push(employee);
+        res.send(employee);
+    } else{
+        res.sendStatus(500);
     }
 });
 
@@ -53,6 +52,7 @@ router.put("/:Id",function (req,res) {
     if(currentEmployee){
         let employee = req.body;
         var isValid = isValidEmployee(employee);
+       
         if(isValid){
             currentEmployee.FirstName = employee.FirstName;
             currentEmployee.LastName = employee.FirstName;
@@ -79,15 +79,19 @@ router.delete("/:Id", function(req,res){
 
 function isValidEmployee(employee){
     if(!employee.Id){
+        console.log("Id");
         return false;
     }
     if(!employee.FirstName){
+        console.log("FirstName");
         return false;
     }
     if(!employee.LastName){
+        console.log("LastName");
         return false;
     }
     if(!employee.Designation){
+        console.log("Designation");
         return false;
     }
     return true;
