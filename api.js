@@ -8,6 +8,9 @@ app.use(bodyParser.json());
 var port = process.env.port || 3000;
 var router = express.Router();
 
+app.use('/api/employee', router);
+app.listen(port);
+
 var employees= [
     {
         Id: 1,
@@ -26,6 +29,7 @@ router.get("/",function (req,res){
 router.get("/:Id",function(req,res){
     var employeeId = parseInt(req.params.Id);
     var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
+
     if(currentEmployee){
         res.json(currentEmployee);
     }else{
@@ -33,7 +37,7 @@ router.get("/:Id",function(req,res){
     }
 });
 
-/// Add employees
+/// Add employee
 router.post("/", function (req,res) {
     var employee = req.body;
     var isValid =isValidEmployee(employee);
@@ -45,13 +49,13 @@ router.post("/", function (req,res) {
     }
 });
 
+//Update employee
 router.put("/:Id",function (req,res) {  
-    var employeeId = parseInt(req.param.Id);
+    var employeeId = parseInt(req.params.Id);
     var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
     if(currentEmployee){
         let employee = req.body;
         var isValid = isValidEmployee(employee);
-       
         if(isValid){
             currentEmployee.FirstName = employee.FirstName;
             currentEmployee.LastName = employee.FirstName;
@@ -65,17 +69,19 @@ router.put("/:Id",function (req,res) {
     }
 });
 
+//delete employee
 router.delete("/:Id", function(req,res){
-    var employeeId = parseInt(req.param.Id);
+    var employeeId = parseInt(req.params.Id);
     var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
     if(currentEmployee){
-         employees = employees.filter(e=>e.Id!=employeeId);
+        employees = employees.filter(e=>e.Id!=employeeId);
         res.sendStatus(204);
     }else{
         res.sendStatus(404);
     }
 });
 
+//validation for employee
 function isValidEmployee(employee){
     if(!employee.Id){
         return false;
@@ -91,9 +97,3 @@ function isValidEmployee(employee){
     }
     return true;
 }
-
-
-app.use('/api/employee', router);
-app.listen(port);
-
-
