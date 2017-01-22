@@ -37,7 +37,6 @@ router.get("/:Id",function(req,res){
 router.post("/", function (req,res) {
     var employee = req.body;
     var isValid =isValidEmployee(employee);
-    console.log(isValid);
     if(isValid){
         employees.push(employee);
         res.send(employee);
@@ -79,19 +78,15 @@ router.delete("/:Id", function(req,res){
 
 function isValidEmployee(employee){
     if(!employee.Id){
-        console.log("Id");
         return false;
     }
     if(!employee.FirstName){
-        console.log("FirstName");
         return false;
     }
     if(!employee.LastName){
-        console.log("LastName");
         return false;
     }
     if(!employee.Designation){
-        console.log("Designation");
         return false;
     }
     return true;
