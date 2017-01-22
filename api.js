@@ -25,20 +25,22 @@ router.get("/",function (req,res){
 /// Add employees
 router.post("/", function (req,res) {
     var employee = req.body;
+    console.log(JSON.stringify(employee));
     var isValid =isValidEmployee(employee);
     if(isValid){
         employees.push(employee);
-        res.send("/employee/" + employee.Id);
+        res.send("api/employee/" + employee.Id);
     } else{
         res.sendStatus(500);
     }
 });
 
 //get specific employee based on Id
-router.get("/:Id",function(req,rep){
+router.get("/:Id",function(req,res){
     var employeeId = parseInt(req.params.Id);
     var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
-    if(!currentEmployee){
+    console.log(JSON.stringify(currentEmployee));
+    if(currentEmployee){
         res.json(currentEmployee);
     }else{
         res.sendStatus(404);
@@ -48,10 +50,10 @@ router.get("/:Id",function(req,rep){
 router.put("/:Id",function (req,res) {  
     var employeeId = parseInt(req.param.Id);
     var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
-    if(!currentEmployee){
+    if(currentEmployee){
         let employee = req.body;
         var isValid = isValidEmployee(employee);
-        if(!isValid){
+        if(isValid){
             currentEmployee.FirstName = employee.FirstName;
             currentEmployee.LastName = employee.FirstName;
             currentEmployee.Designation = employee.Designation;
@@ -67,11 +69,11 @@ router.put("/:Id",function (req,res) {
 router.delete("/:Id", function(req,res){
     var employeeId = parseInt(req.param.Id);
     var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
-    if(!currentEmployee){
-        res.sendStatus(404);
-    }else{
-        employees = employees.filter(e=>e.Id!=employeeId);
+    if(currentEmployee){
+         employees = employees.filter(e=>e.Id!=employeeId);
         res.sendStatus(204);
+    }else{
+        res.sendStatus(404);
     }
 });
 
