@@ -41,7 +41,7 @@ router.get("/:Id",function(req,rep){
     if(!currentEmployee){
         res.json(currentEmployee);
     }else{
-        res.sendStatus(204);
+        res.sendStatus(404);
     }
 });
 
@@ -59,10 +59,21 @@ router.put("/:Id",function (req,res) {
         }else{
             res.sendStatus(500);
         }
+    }else{
+        res.sendStatus(404);
     }
 });
 
-
+router.delete("/:Id", function(req,res){
+    var employeeId = parseInt(req.param.Id);
+    var currentEmployee = employees.filter(e=>e.Id==employeeId)[0];
+    if(!currentEmployee){
+        res.sendStatus(404);
+    }else{
+        employees = employees.filter(e=>e.Id!=employeeId);
+        res.sendStatus(204);
+    }
+});
 
 function isValidEmployee(employee){
     if(!employee.Id){
